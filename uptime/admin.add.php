@@ -1,0 +1,176 @@
+<?php
+
+security_check();
+admin_check();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+{
+
+    // Basic serverside validation
+    if (!validate_blank($_POST['name']) || 
+        !validate_blank($_POST['url']))
+    {
+        message_set('Asset Error', 'There was an error with the provided asset.', 'red');
+        header_redirect('/admin/dashboard');
+    }
+
+    // Validate URL format
+    if (!filter_var($_POST['url'], FILTER_VALIDATE_URL))
+    {
+        message_set('Asset Error', 'Please provide a valid URL.', 'red');
+        header_redirect('/admin/dashboard');
+    }
+
+    // Save asset details to the database
+    $query = 'INSERT INTO assets (
+            name, 
+            url, 
+            description,
+            status,
+            created_at,
+            updated_at
+        ) VALUES (
+            "'.addslashes($_POST['name']).'",
+            "'.addslashes($_POST['url']).'", 
+            "'.addslashes($_POST['description']).'",
+            1,
+            NOW(),
+            NOW()
+        )';
+    mysqli_query($connect, $query);
+
+    message_set('Asset Success', 'Asset has been successfully created.');
+    header_redirect('/admin/dashboard');
+}
+
+define('APP_NAME', 'Uptime');
+define('PAGE_TITLE', 'Add Asset');
+define('PAGE_SELECTED_SECTION', 'admin-dashboard');
+define('PAGE_SELECTED_SUB_PAGE', '/admin/add');
+
+include('../templates/html_header.php');
+include('../templates/nav_header.php');
+include('../templates/nav_slideout.php');
+include('../templates/nav_sidebar.php');
+include('../templates/main_header.php');
+
+include('../templates/message.php');
+
+?>
+
+<h1 class="w3-margin-top w3-margin-bottom">
+    <img
+        src="https://cdn.brickmmo.com/icons@1.0.0/uptime.png"
+        height="50"
+        style="vertical-align: top"
+    />
+    Uptime
+</h1>
+<p>
+    <a href="/admin/dashboard">Uptime</a> / 
+    Add Asset
+</p>
+
+<hr>
+
+<h2>Add Asset</h2>
+
+<form
+    method="post"
+    novalidate
+    id="main-form"
+>
+
+    <input  
+        name="name" 
+        class="w3-input w3-border" 
+        type="text" 
+        id="name" 
+        autocomplete="off"
+    />
+    <label for="name" class="w3-text-gray">
+        Name <span id="name-error" class="w3-text-red"></span>
+    </label>
+
+    <input  
+        name="url" 
+        class="w3-input w3-border w3-margin-top" 
+        type="url" 
+        id="url" 
+        autocomplete="off"
+        placeholder="https://example.com"
+    />
+    <label for="url" class="w3-text-gray">
+        URL <span id="url-error" class="w3-text-red"></span>
+    </label>
+
+    <textarea  
+        name="description" 
+        class="w3-input w3-border w3-margin-top" 
+        id="description" 
+        autocomplete="off"
+    ></textarea>
+    <label for="description" class="w3-text-gray">
+        Description <span id="description-error" class="w3-text-red"></span>
+    </label>
+
+    <button type="button" class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">
+        <i class="fa-solid fa-tag fa-padding-right"></i>
+        Add Asset
+    </button>
+
+</form>
+
+<script>
+
+    async function validateMainForm() {
+        let errors = 0;
+
+        let name = document.getElementById("name");
+        let name_error = document.getElementById("name-error");
+        name_error.innerHTML = "";
+        if (name.value == "") {
+            name_error.innerHTML = "(Name is required)";
+            errors++;
+        }
+
+        let url = document.getElementById("url");
+        let url_error = document.getElementById("url-error");
+        url_error.innerHTML = "";
+        if (url.value == "") {
+            url_error.innerHTML = "(URL is required)";
+            errors++;
+        } else {
+            const json = await validateExistingUrl(url.value);
+            if(json.error == true)
+            {
+                url_error.innerHTML = "(URL already exists)";
+                errors++;
+            }
+        }
+
+        if (errors) return false;
+
+        let mainForm = document.getElementById('main-form');
+        mainForm.submit();
+    }
+
+    async function validateExistingUrl(url) {
+        return fetch('/ajax/url/exists',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({url: url})
+            })  
+            .then((response)=>response.json())
+            .then((responseJson)=>{return responseJson});
+    }
+
+</script>
+
+<?php
+
+include('../templates/main_footer.php');
+include('../templates/debug.php');
+include('../templates/html_footer.php');
