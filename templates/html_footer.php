@@ -9,6 +9,7 @@
 ></script>
 
 <script src="https://kit.fontawesome.com/a74f41de6e.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   </body>
 </html>

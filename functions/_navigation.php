@@ -25,6 +25,10 @@ function navigation_array($selected = false)
                                     'url' => '/admin/add',
                                     'colour' => 'red',
                                 ],[
+                                    'title' => 'Recent Issues',
+                                    'url' => '/admin/issues',
+                                    'colour' => 'red',
+                                ],[
                                     'br' => '---',
                                 ],[
                                     'title' => 'Visit Uptime App',

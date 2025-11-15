@@ -7,44 +7,60 @@ if(
     !isset($_GET['key']) || 
     !is_numeric($_GET['key']))
 {
-    message_set('Tag Error', 'There was an error with the provided QR code.');
-    header_redirect('/console/dashboard');
+    message_set('Asset Error', 'There was an error with the provided asset.');
+    header_redirect('/admin/dashboard');
 }
-elseif ($_SERVER['REQUEST_METHOD'] == 'POST') 
+
+$query = 'SELECT *
+    FROM assets
+    WHERE id = '.$_GET['key'].'
+    LIMIT 1';
+$result = mysqli_query($connect, $query);
+
+if(!mysqli_num_rows($result))
+{
+    message_set('Asset Error', 'There was an error with the provided asset.');
+    header_redirect('/admin/dashboard');
+}
+
+$record = mysqli_fetch_assoc($result);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 
     // Basic serverside validation
     if (!validate_blank($_POST['name']) || 
-        !validate_blank($_POST['location']) ||
-        !validate_blank($_POST['starts_at']) ||
-        !validate_blank($_POST['ends_at']))
+        !validate_blank($_POST['url']))
     {
-        message_set('Event Error', 'There was an error with the provided event.', 'red');
-        header_redirect('/admin/dashboard');
+        message_set('Asset Error', 'There was an error with the provided asset.', 'red');
+        header_redirect('/admin/edit/'.$_GET['key']);
     }
-    
-    $query = 'UPDATE events SET
+
+    // Validate URL format
+    if (!filter_var($_POST['url'], FILTER_VALIDATE_URL))
+    {
+        message_set('Asset Error', 'Please provide a valid URL.', 'red');
+        header_redirect('/admin/edit/'.$_GET['key']);
+    }
+
+    $query = 'UPDATE assets SET
         name = "'.addslashes($_POST['name']).'",
+        url = "'.addslashes($_POST['url']).'",
         description = "'.addslashes($_POST['description']).'",
-        location = "'.addslashes($_POST['location']).'",
-        registration = "'.addslashes($_POST['registration']).'",
-        online = "'.addslashes($_POST['online']).'",
-        starts_at = "'.addslashes($_POST['starts_at']).'",
-        ends_at = "'.addslashes($_POST['ends_at']).'",
         updated_at = NOW()
         WHERE id = '.$_GET['key'].'
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Event Success', 'Event has been successfully updated.');
+    message_set('Asset Success', 'Asset has been successfully updated.');
     header_redirect('/admin/dashboard');
     
 }
 
-define('APP_NAME', 'Events');
-define('PAGE_TITLE', 'Edit Event');
-define('PAGE_SELECTED_SECTION', 'events');
-define('PAGE_SELECTED_SUB_PAGE', '/admin/dashboardedit');
+define('APP_NAME', 'Uptime');
+define('PAGE_TITLE', 'Edit Asset');
+define('PAGE_SELECTED_SECTION', 'admin-dashboard');
+define('PAGE_SELECTED_SUB_PAGE', '/admin/edit');
 
 include('../templates/html_header.php');
 include('../templates/nav_header.php');
@@ -54,33 +70,25 @@ include('../templates/main_header.php');
 
 include('../templates/message.php');
 
-$query = 'SELECT *
-    FROM events
-    WHERE id = "'.$_GET['key'].'"
-    LIMIT 1';
-$result = mysqli_query($connect, $query);
-$record = mysqli_fetch_assoc($result);
-
 ?>
 
 <h1 class="w3-margin-top w3-margin-bottom">
     <img
-        src="https://cdn.brickmmo.com/icons@1.0.0/events.png"
+        src="https://cdn.brickmmo.com/icons@1.0.0/uptime.png"
         height="50"
         style="vertical-align: top"
     />
-    Events
+    Uptime
 </h1>
 <p>
-    <a href="/admin/dashboard">Events</a> / 
-    Edit Event
+    <a href="/admin/dashboard">Uptime</a> / 
+    Edit Asset
 </p>
 
 <hr>
 
-<h2>Edit Event: <?=$record['name']?></h2>
+<h2>Edit Asset</h2>
 
-<!-- Edit form -->
 <form
     method="post"
     novalidate
@@ -99,121 +107,80 @@ $record = mysqli_fetch_assoc($result);
         Name <span id="name-error" class="w3-text-red"></span>
     </label>
 
+    <input  
+        name="url" 
+        class="w3-input w3-border w3-margin-top" 
+        type="url" 
+        id="url" 
+        autocomplete="off"
+        placeholder="https://example.com"
+        value="<?=$record['url']?>"
+    />
+    <label for="url" class="w3-text-gray">
+        URL <span id="url-error" class="w3-text-red"></span>
+    </label>
+
     <textarea  
         name="description" 
         class="w3-input w3-border w3-margin-top" 
         id="description" 
         autocomplete="off"
     ><?=$record['description']?></textarea>
-    <label for="name" class="w3-text-gray">
+    <label for="description" class="w3-text-gray">
         Description <span id="description-error" class="w3-text-red"></span>
     </label>
 
-    <input  
-        name="location" 
-        class="w3-input w3-border w3-margin-top" 
-        type="text" 
-        id="location" 
-        autocomplete="off"
-        value="<?=$record['location']?>"
-    />
-    <label for="location" class="w3-text-gray">
-        Location <span id="location-error" class="w3-text-red"></span>
-    </label>
-
-    <input  
-        name="registration" 
-        class="w3-input w3-border w3-margin-top" 
-        type="text" 
-        id="registration" 
-        autocomplete="off"
-        value="<?=$record['registration']?>"
-    />
-    <label for="registration" class="w3-text-gray">
-        Registration URL <span id="registration-error" class="w3-text-red"></span>
-    </label>
-
-    <input  
-        name="online" 
-        class="w3-input w3-border w3-margin-top" 
-        type="text" 
-        id="online" 
-        autocomplete="off"
-        value="<?=$record['online']?>"
-    />
-    <label for="online" class="w3-text-gray">
-        Online URL <span id="online-error" class="w3-text-red"></span>
-    </label>
-
-    <input  
-        name="starts_at" 
-        class="w3-input w3-border w3-margin-top" 
-        type="datetime-local" 
-        id="starts-at" 
-        autocomplete="off"
-        value="<?=$record['starts_at']?>"
-    />
-    <label for="starts_at" class="w3-text-gray">
-        Start Date <span id="starts-at-error" class="w3-text-red"></span>
-    </label>
-
-    <input  
-        name="ends_at" 
-        class="w3-input w3-border w3-margin-top" 
-        type="datetime-local" 
-        id="ends-at" 
-        autocomplete="off"
-        value="<?=$record['ends_at']?>"
-    />
-    <label for="ends_at" class="w3-text-gray">
-        End Date <span id="ends-at-error" class="w3-text-red"></span>
-    </label>
-
-    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
+    <button type="button" class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">
         <i class="fa-solid fa-tag fa-padding-right"></i>
-        Edit Event
+        Update Asset
     </button>
 
 </form>
 
 <script>
 
-    function validateMainForm() {
+    async function validateMainForm() {
         let errors = 0;
 
         let name = document.getElementById("name");
         let name_error = document.getElementById("name-error");
         name_error.innerHTML = "";
         if (name.value == "") {
-            name_error.innerHTML = "(name is required)";
+            name_error.innerHTML = "(Name is required)";
             errors++;
         }
 
-        let location = document.getElementById("location");
-        let location_error = document.getElementById("location-error");
-        location_error.innerHTML = "";
-        if (location.value == "") {
-            location_error.innerHTML = "(Location is required)";
+        let url = document.getElementById("url");
+        let url_error = document.getElementById("url-error");
+        url_error.innerHTML = "";
+        if (url.value == "") {
+            url_error.innerHTML = "(URL is required)";
             errors++;
-        }
-
-        let starts_at = document.getElementById("starts-at");
-        let starts_at_error = document.getElementById("starts-at-error");
-        starts_at_error.innerHTML = "";
-        if (starts_at.value == "") {
-            starts_at_error.innerHTML = "(Start date is required)";
-            errors++;
-        }
-
-        let ends_at = document.getElementById("ends-at");
-        let ends_at_error = document.getElementById("ends-at-error");
-        ends_at_error.innerHTML = "";
-        if (ends_at.value == "") {
-            ends_at_error.innerHTML = "(End date is required)";
-            errors++;
+        } else {
+            const json = await validateExistingUrl(url.value, <?=$record['id']?>);
+            if(json.error == true)
+            {
+                url_error.innerHTML = "(URL already exists)";
+                errors++;
+            }
         }
 
         if (errors) return false;
+
+        let mainForm = document.getElementById('main-form');
+        mainForm.submit();
+    }
+
+    async function validateExistingUrl(url, id) {
+        return fetch('/ajax/url/exists',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({url: url, id: id})
+            })  
+            .then((response)=>response.json())
+            .then((responseJson)=>{return responseJson});
     }
 
 </script>
@@ -221,6 +188,5 @@ $record = mysqli_fetch_assoc($result);
 <?php
 
 include('../templates/main_footer.php');
+include('../templates/debug.php');
 include('../templates/html_footer.php');
-
-?>

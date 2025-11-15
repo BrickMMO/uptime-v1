@@ -123,6 +123,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
         <th>Last Check</th>
         <th class="bm-table-icon"></th>
         <th class="bm-table-icon"></th>
+        <th class="bm-table-icon"></th>
     </tr>
 
     <?php while ($record = mysqli_fetch_assoc($result)): ?>
@@ -131,7 +132,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
                 <?=$record['name'] ?>
                 <br>
                 <small>
-                    URL: <a href="<?=$record['url']?>" target="_blank"><?=$record['url']?></a>
+                    URL: <a href="<?=$record['url']?>"><?=$record['url']?></a>
                 </small>
             </td>
             <td>
@@ -148,6 +149,11 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
                         <?php endif; ?>
                     </small>
                 <?php endif; ?>
+            </td>
+            <td>
+                <a href="/admin/asset/<?=$record['id'] ?>">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
             </td>
             <td>
                 <a href="/admin/edit/<?=$record['id'] ?>">

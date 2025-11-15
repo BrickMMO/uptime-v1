@@ -92,7 +92,7 @@ $all_assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             MIN(uc.response_time) as min_response_time,
             MAX(uc.response_time) as max_response_time
         FROM assets a 
-        JOIN uptime_checks uc ON a.id = uc.asset_id 
+        JOIN checks uc ON a.id = uc.asset_id 
         WHERE a.status = 'active' AND $where_clause
     ");
     $stmt->execute($params);
@@ -152,7 +152,7 @@ $all_assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             SUM(CASE WHEN uc.up = 0 THEN 1 ELSE 0 END) as down_checks,
             SUM(CASE WHEN uc.up IS NULL THEN 1 ELSE 0 END) as error_checks
         FROM assets a 
-        JOIN uptime_checks uc ON a.id = uc.asset_id 
+        JOIN checks uc ON a.id = uc.asset_id 
         WHERE a.status = 'active' AND $where_clause
         GROUP BY a.id, a.name, a.url
         ORDER BY a.name
