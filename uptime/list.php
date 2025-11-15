@@ -1,6 +1,6 @@
 <?php
 
-define('APP_NAME', 'QR Codes');
+define('APP_NAME', 'Uptime');
 define('PAGE_TITLE', 'Dashboard');
 define('PAGE_SELECTED_SECTION', '');
 define('PAGE_SELECTED_SUB_PAGE', '');
@@ -13,11 +13,11 @@ include('../templates/main_header.php');
 
 include('../templates/message.php');
 
-$query = 'SELECT *
-    FROM events
-    WHERE ends_at > NOW()
-    ORDER BY starts_at ASC
-    LIMIT 5';
+$query = 'SELECT a.*, 
+    (SELECT up FROM checks WHERE asset_id = a.id ORDER BY checked_at DESC LIMIT 1) as current_status
+    FROM assets a
+    WHERE a.deleted_at IS NULL
+    ORDER BY a.name';
 $result = mysqli_query($connect, $query);
 
 ?>
@@ -25,45 +25,45 @@ $result = mysqli_query($connect, $query);
 <main>
     
     <div class="w3-center">
-        <h1>Upcoming Events</h1>
+        <h1>Uptime Monitor</h1>
     </div>
 
     <hr>
 
-    <div>
+    <table class="w3-table w3-bordered w3-striped">
+        <tr>
+            <th class="bm-table-icon"></th>
+            <th>Asset</th>
+            <th class="bm-table-icon">Status</th>
+        </tr>
 
         <?php while ($record = mysqli_fetch_assoc($result)): ?>
-
-            <div class="w3-card-4 w3-margin-top" style="max-width:100%; height: 100%;">
-                <header class="w3-container w3-purple">
-                    <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?=$record['name']?></h4>
-                </header>
-
-                <div class="w3-flex w3-padding">
-                    
-                    <div style="width: 200px;">
-                        <a href="/details/<?=$record['id']?>">
-                            <?php if($record['thumbnail']): ?>
-                                <img src="<?=$record['thumbnail']?>" class="w3-image" style="max-wdith: 100%;">
-                            <?php else: ?>
-                                <img src="https://cdn.brickmmo.com/images@1.0.0/no_calendar.png" class="w3-image" style="max-wdith: 100%;">
-                            <?php endif; ?>
-                        </a>
-                    </div>
-                    
-                    <div class="w3-padding" style="flex: 1;">
-                        Date: <span class="w3-bold"><?=date_to_format($record['starts_at'], 'FULL')?></span>
-                        <br>
-                        Location: <span class="w3-bold"><?=$record['location']?></span>
-                        <hr>
-                        <a href="/details/<?=$record['id']?>">Event Details</a>
-                    </div>
-                </div>
-            </div>
-
+            <tr>
+                <td>
+                    <?php if($record['image']): ?>
+                        <img src="<?=$record['image']?>" width="70">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <strong><?=$record['name']?></strong>
+                    <br>
+                    <small>
+                        <a href="<?=$record['url']?>" target="_blank"><?=$record['url']?></a>
+                    </small>
+                </td>
+                <td>
+                    <?php if($record['current_status'] == 1): ?>
+                        <span class="w3-tag w3-green">Up</span>
+                    <?php elseif($record['current_status'] === '0'): ?>
+                        <span class="w3-tag w3-red">Down</span>
+                    <?php else: ?>
+                        <span class="w3-tag w3-grey">Unknown</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
         <?php endwhile; ?>
 
-    </div>
+    </table>
 
 </main>
 

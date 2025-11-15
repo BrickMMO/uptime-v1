@@ -119,6 +119,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
 
 <table class="w3-table w3-bordered w3-striped w3-margin-bottom">
     <tr>
+        <th class="bm-table-icon"></th>
         <th>Name</th>
         <th>Last Check</th>
         <th class="bm-table-icon"></th>
@@ -128,6 +129,11 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
 
     <?php while ($record = mysqli_fetch_assoc($result)): ?>
         <tr>
+            <td>
+                <?php if($record['image']): ?>
+                    <img src="<?=$record['image']?>" width="70">
+                <?php endif; ?>
+            </td>
             <td>
                 <?=$record['name'] ?>
                 <br>
