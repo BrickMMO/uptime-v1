@@ -131,7 +131,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
         <tr>
             <td>
                 <?php if($record['image']): ?>
-                    <img src="<?=$record['image']?>" width="70">
+                    <img src="<?=$record['image']?>" width="70" style="border: 5px solid #848484; box-sizing: border-box;">
                 <?php endif; ?>
             </td>
             <td>
@@ -157,7 +157,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
                 <?php endif; ?>
             </td>
             <td>
-                <a href="/admin/asset/<?=$record['id'] ?>">
+                <a href="/details/<?=$record['id'] ?>">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
             </td>

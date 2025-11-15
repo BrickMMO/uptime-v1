@@ -101,11 +101,16 @@ include('../templates/message.php');
 
 <h2>Asset Details: <?=htmlspecialchars($asset['name'])?></h2>
 <p class="w3-text-grey">
-    <a href="<?=htmlspecialchars($asset['url'])?>">
+    <a href="<?=htmlspecialchars($asset['url'])?>" target="_blank">
         <i class="fas fa-external-link-alt fa-xs"></i>
         <?=htmlspecialchars($asset['url'])?>
     </a>
 </p>
+
+<?php if($asset['image']): ?>
+    <img src="<?=$asset['image']?>" class="w3-image" style="max-width: 100%; border: 5px solid #848484; box-sizing: border-box;">
+    <hr>
+<?php endif; ?>
 
 <!-- Current Status Summary -->
 <?php if($latest): ?>
