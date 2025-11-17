@@ -12,23 +12,23 @@ if(ENV_DEBUG)
 if(ENV_LOCAL)
     {
         $links = array(
-            'Bricksum' => 'http://local.bricksum.brickmmo.com:7777/',
-            'Colours' => 'http://local.colours.brickmmo.com:7777/',
-            'Conversions' => 'http://local.conversions.brickmmo.com:7777/',
-            'Events' => 'http://local.events.brickmmo.com:7777/',
-            'List' => 'http://local.list.brickmmo.com:7777/',
-            'Parts' => 'http://local.parts.brickmmo.com:7777/',
-            'Placekit' => 'http://local.placekit.brickmmo.com:7777/',
-            'QR' => 'http://local.qr.brickmmo.com:7777/',
-            'Search' => 'http://local.search.brickmmo.com:7777/',
-            'SSO' => 'http://local.sso.brickmmo.com:7777/',
-            'Uptime' => 'http://local.uptime.brickmmo.com:7777/',
+            'Bricksum' => 'http://bricksum.local.brickmmo.com/',
+            'Colours' => 'http://colours.local.brickmmo.com/',
+            'Conversions' => 'http://conversions.local.brickmmo.com/',
+            'Events' => 'http://events.local.brickmmo.com/',
+            'List' => 'http://list.local.brickmmo.com/',
+            'Parts' => 'http://parts.local.brickmmo.com/',
+            'Placekit' => 'http://placekit.local.brickmmo.com/',
+            'QR' => 'http://qr.local.brickmmo.com/',
+            'Search' => 'http://search.local.brickmmo.com/',
+            'SSO' => 'http://sso.local.brickmmo.com/',
+            'Uptime' => 'http://uptime.local.brickmmo.com/',
 
-            // 'Applications' => 'http://local.applications.brickmmo.com:7777/',
-            // 'GHitHub' => 'http://local.github.brickmmo.com:7777/',
-            // 'Media' => 'http://local.media.brickmmo.com:7777/',
-            // 'Stores' => 'http://local.stores.brickmmo.com:7777/',
-            // 'Stats' => 'http://local.stores.brickmmo.com:7777/',
+            // 'Applications' => 'http://applications.local.brickmmo.com/',
+            // 'GHitHub' => 'http://github.local.brickmmo.com/',
+            // 'Media' => 'http://media.local.brickmmo.com/',
+            // 'Stores' => 'http://stores.local.brickmmo.com/',
+            // 'Stats' => 'http://stores.local.brickmmo.com/',
         );
 
 
