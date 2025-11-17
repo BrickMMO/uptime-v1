@@ -52,19 +52,26 @@ AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
 ORDER BY checked_at DESC';
 $checks_result = mysqli_query($connect, $checks_query);
 
-// Get checks for charts (in chronological order)
+// Get checks for charts (last 48 checks in chronological order)
 $chart_query = 'SELECT * FROM checks 
 WHERE asset_id = '.$asset_id.' 
-AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-ORDER BY checked_at ASC';
+ORDER BY checked_at DESC
+LIMIT 48';
 $chart_result = mysqli_query($connect, $chart_query);
+
+// Store results in array and reverse to get chronological order
+$chart_data = [];
+while($chart_check = mysqli_fetch_assoc($chart_result)) {
+    $chart_data[] = $chart_check;
+}
+$chart_data = array_reverse($chart_data);
 
 $chart_labels = [];
 $chart_response_times = [];
 $chart_status = [];
 
-while($chart_check = mysqli_fetch_assoc($chart_result)) {
-    $chart_labels[] = date('H:i', strtotime($chart_check['checked_at']));
+foreach($chart_data as $chart_check) {
+    $chart_labels[] = date('M j H:i', strtotime($chart_check['checked_at']));
     $chart_response_times[] = round($chart_check['response_time'], 2);
     $chart_status[] = $chart_check['up'] == 1 ? 100 : 0;
 }

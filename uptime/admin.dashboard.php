@@ -11,6 +11,10 @@ if (isset($_GET['delete']))
         LIMIT 1';
     mysqli_query($connect, $query);
 
+    $query = 'DELETE FROM checks
+        WHERE asset_id = '.$_GET['delete'];
+    mysqli_query($connect, $query);
+
     message_set('Delete Success', 'Asset has been deleted.');
     header_redirect('/admin/dashboard');
     
@@ -131,7 +135,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
         <tr>
             <td>
                 <?php if($record['image']): ?>
-                    <img src="<?=$record['image']?>" width="70" style="border: 5px solid #848484; box-sizing: border-box;">
+                    <img src="<?=$record['image']?>" width="70" style="border: 1px solid #848484; box-sizing: border-box;">
                 <?php endif; ?>
             </td>
             <td>

@@ -105,10 +105,25 @@ while($asset = mysqli_fetch_assoc($result))
     }
     
     // Check if asset needs a screenshot
-    if(empty($asset['image']) && $status == 1)
+    // Capture if: 1) no screenshot exists, 2) status is UP, 3) last screenshot is older than 30 days or NULL
+    $needs_screenshot = false;
+    
+    if($status == 1)
     {
-        echo '<p>📸 Capturing screenshot...</p>';
-        
+        if(empty($asset['image']))
+        {
+            $needs_screenshot = true;
+            echo '<p>📸 No screenshot exists, capturing...</p>';
+        }
+        elseif($asset['screenshot_at'] == NULL || strtotime($asset['screenshot_at']) < strtotime('-30 days'))
+        {
+            $needs_screenshot = true;
+            echo '<p>📸 Screenshot is older than 30 days, updating...</p>';
+        }
+    }
+    
+    if($needs_screenshot)
+    {
         $screenshot_url = 'https://pdfer.codeadam.ca/url-to-image?url='.urlencode($asset['url']).'&width=384&height=216';
         echo '<p>API: <a href="'.$screenshot_url.'" target="_blank">'.$screenshot_url.'</a></p>';
         
@@ -120,7 +135,8 @@ while($asset = mysqli_fetch_assoc($result))
             $data_uri = 'data:image/png;base64,'.$base64_image;
             
             $update_query = 'UPDATE assets SET
-                image = "'.mysqli_real_escape_string($connect, $data_uri).'"
+                image = "'.mysqli_real_escape_string($connect, $data_uri).'",
+                screenshot_at = NOW()
                 WHERE id = '.$asset['id'].'
                 LIMIT 1';
             

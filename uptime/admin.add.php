@@ -25,14 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $query = 'INSERT INTO assets (
             name, 
             url, 
-            description,
             status,
             created_at,
             updated_at
         ) VALUES (
             "'.addslashes($_POST['name']).'",
             "'.addslashes($_POST['url']).'", 
-            "'.addslashes($_POST['description']).'",
             1,
             NOW(),
             NOW()
@@ -102,16 +100,6 @@ include('../templates/message.php');
     />
     <label for="url" class="w3-text-gray">
         URL <span id="url-error" class="w3-text-red"></span>
-    </label>
-
-    <textarea  
-        name="description" 
-        class="w3-input w3-border w3-margin-top" 
-        id="description" 
-        autocomplete="off"
-    ></textarea>
-    <label for="description" class="w3-text-gray">
-        Description <span id="description-error" class="w3-text-red"></span>
     </label>
 
     <button type="button" class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">

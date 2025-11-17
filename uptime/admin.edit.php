@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $query = 'UPDATE assets SET
         name = "'.addslashes($_POST['name']).'",
         url = "'.addslashes($_POST['url']).'",
-        description = "'.addslashes($_POST['description']).'",
         updated_at = NOW()
         WHERE id = '.$_GET['key'].'
         LIMIT 1';
@@ -118,16 +117,6 @@ include('../templates/message.php');
     />
     <label for="url" class="w3-text-gray">
         URL <span id="url-error" class="w3-text-red"></span>
-    </label>
-
-    <textarea  
-        name="description" 
-        class="w3-input w3-border w3-margin-top" 
-        id="description" 
-        autocomplete="off"
-    ><?=$record['description']?></textarea>
-    <label for="description" class="w3-text-gray">
-        Description <span id="description-error" class="w3-text-red"></span>
     </label>
 
     <button type="button" class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">

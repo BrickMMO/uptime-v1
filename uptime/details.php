@@ -20,7 +20,11 @@ if(!isset($_GET['key']) || !is_numeric($_GET['key']))
 
 $asset_id = $_GET['key'];
 
-$query = 'SELECT * FROM assets WHERE id = '.$asset_id.' AND deleted_at IS NULL LIMIT 1';
+$query = 'SELECT * 
+    FROM assets 
+    WHERE id = '.$asset_id.' 
+    AND deleted_at IS NULL 
+    LIMIT 1';
 $result = mysqli_query($connect, $query);
 
 if(!mysqli_num_rows($result))
@@ -37,34 +41,39 @@ $stats_query = 'SELECT
     AVG(response_time) as avg_response_time,
     MAX(response_time) as max_response_time,
     MIN(response_time) as min_response_time
-FROM checks 
-WHERE asset_id = '.$asset_id.' 
-AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
+    FROM checks 
+    WHERE asset_id = '.$asset_id.' 
+    AND checked_at >= DATE_SUB(NOW(), INTERVAL 48 HOUR)';
 $stats_result = mysqli_query($connect, $stats_query);
 $stats = mysqli_fetch_assoc($stats_result);
 
 $uptime_percentage = $stats['total_checks'] > 0 ? ($stats['up_checks'] / $stats['total_checks']) * 100 : 0;
 
 // Get latest check
-$latest_query = 'SELECT * FROM checks 
-WHERE asset_id = '.$asset_id.' 
-ORDER BY checked_at DESC 
-LIMIT 1';
+$latest_query = 'SELECT * 
+    FROM checks 
+    WHERE asset_id = '.$asset_id.' 
+    ORDER BY checked_at DESC 
+    LIMIT 1';
 $latest_result = mysqli_query($connect, $latest_query);
 $latest = mysqli_fetch_assoc($latest_result);
 
 // Get all checks from last 24 hours for table
-$checks_query = 'SELECT * FROM checks 
-WHERE asset_id = '.$asset_id.' 
-AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-ORDER BY checked_at DESC';
+$checks_query = 'SELECT * 
+    FROM checks 
+    WHERE asset_id = '.$asset_id.' 
+    -- AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+    ORDER BY checked_at DESC
+    LIMIT 48';
 $checks_result = mysqli_query($connect, $checks_query);
 
 // Get checks for charts (in chronological order)
-$chart_query = 'SELECT * FROM checks 
-WHERE asset_id = '.$asset_id.' 
-AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-ORDER BY checked_at ASC';
+$chart_query = 'SELECT * 
+    FROM checks 
+    WHERE asset_id = '.$asset_id.' 
+    -- AND checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+    ORDER BY checked_at ASC
+    LIMIT 48';
 $chart_result = mysqli_query($connect, $chart_query);
 
 $chart_labels = [];
@@ -93,6 +102,8 @@ while($chart_check = mysqli_fetch_assoc($chart_result)) {
     <?php endif; ?>
 
     <p>
+        Asset: <span class="w3-bold"><?=htmlspecialchars($asset['name'])?></span>
+        <br>
         URL: <span class="w3-bold"><a href="<?=htmlspecialchars($asset['url'])?>" target="_blank"><?=htmlspecialchars($asset['url'])?></a></span>
     </p>
 
@@ -141,7 +152,7 @@ while($chart_check = mysqli_fetch_assoc($chart_result)) {
 
     <hr>
 
-    <h2>24 Hour Performance</h2>
+    <h2>Recent Performance (48h)</h2>
 
     <div class="w3-card w3-white w3-padding w3-margin-bottom">
         <canvas id="performanceChart" style="max-height: 400px;"></canvas>
@@ -263,7 +274,7 @@ while($chart_check = mysqli_fetch_assoc($chart_result)) {
 
     <hr>
 
-    <h2>Recent Checks (24h)</h2>
+    <h2>Recent Checks (48h)</h2>
 
     <table class="w3-table w3-bordered w3-striped w3-margin-bottom">
         <tr>
