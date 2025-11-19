@@ -67,6 +67,4 @@ function form_select_array($name, $options, $data = array())
 
     return $html;
 
-    return $html;
-
 }
