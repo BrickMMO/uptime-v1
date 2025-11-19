@@ -47,7 +47,7 @@ $result = mysqli_query($connect, $query);
                         <?php if($record['image']): ?>
                             <img src="<?=$record['image']?>" class="w3-image" style="max-width: 100%; border: 5px solid #848484; box-sizing: border-box;">
                         <?php else: ?>
-                            <img src="https://cdn.brickmmo.com/images@1.0.0/no_screenshot.png" class="w3-image" style="max-width: 100%; border: 5px solid #848484; box-sizing: border-box;">
+                            <img src="https://cdn.brickmmo.com/images@1.0.0/no-screenshot.png" class="w3-image" style="max-width: 100%; border: 5px solid #848484; box-sizing: border-box;">
                         <?php endif; ?>
                     </div>
                     

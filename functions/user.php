@@ -3,7 +3,7 @@
 function user_avatar($id, $absolute = false)
 {
     $user = user_fetch($id);
-    return $user['avatar'] ? $user['avatar'] : 'https://cdn.brickmmo.com/images@1.0.0/no_avatar.png';
+    return $user['avatar'] ? $user['avatar'] : 'https://cdn.brickmmo.com/images@1.0.0/no-avatar.png';
 }
 
 function user_name($id)

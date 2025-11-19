@@ -3,7 +3,7 @@
 function stores_image($id)
 {
     $store = stores_fetch($id);
-    return $store['image'] ? $store['image'] : '/images/no_city.png';
+    return $store['image'] ? $store['image'] : '/images/no-city.png';
 }
 
 function stores_fetch($identifier, $field = false)
