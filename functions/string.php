@@ -98,3 +98,40 @@ function string_normalize_url($url)
     // Reconstruct normalized URL (always use https for comparison)
     return 'https://' . $host . $port . $path . $query;
 }
+
+// Converts a live BrickMMO URL to a local URL, checking .env for HTTPS and LOCAL
+function string_url_local($url)
+{
+
+    
+    if (ENV_LOCAL == true) 
+    {
+        // Do not convert for GitHub hosted assets
+        if(string_url_ip($url) == '185.199.108.153') return $url;
+        $url = str_replace('brickmmo.com', 'local.brickmmo.com', $url);
+    }
+
+    if(ENV_HTTPS == false)
+    {
+        $url = str_replace('https:', 'http:', $url);
+    }
+
+    return $url;
+
+}
+
+// Returns the IP address of the given URL
+function string_url_ip($url)
+{
+
+    $host = parse_url($url, PHP_URL_HOST);
+
+    if ($host) 
+    {
+        $ip = gethostbyname($host);
+        return $ip;
+    }
+    return false;
+
+}
+
