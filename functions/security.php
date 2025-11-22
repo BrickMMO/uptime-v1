@@ -97,7 +97,7 @@ function security_check()
 
     if(!security_is_logged_in())
     {
-        header_redirect(ENV_DOMAIN);
+        header_redirect(ENV_SSO_DOMAIN.'/?redirect='.urlencode(ENV_DOMAIN.$_SERVER['REQUEST_URI']));
     }
 
     $id = security_decrypt($_COOKIE['hash_id']);

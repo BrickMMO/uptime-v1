@@ -4,8 +4,7 @@
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><?=PAGE_TITLE?> | <?=APP_NAME?> | BrickMMO</title>
-
+    <title><?=PAGE_TITLE?> | <?=APP_NAME?> | BrickMMO</title>
         
     <!-- W3 School CSS -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" />
