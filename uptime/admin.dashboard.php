@@ -61,10 +61,20 @@ WHERE a.status = 1 AND c.checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
 $stats_result = mysqli_query($connect, $stats_query);
 $stats = mysqli_fetch_assoc($stats_result);
 
+if($stats['avg_response_time_24h'] === null) {
+    $stats['avg_response_time_24h'] = 0;
+}
+if($stats['total_checks_24h'] === null) {
+    $stats['total_checks_24h'] = 0;
+}
+if($stats['up_checks_24h'] === null) {
+    $stats['up_checks_24h'] = 0;
+}
+
 $issues_query = 'SELECT COUNT(*) as issue_count 
-FROM checks c 
-JOIN assets a ON c.asset_id = a.id 
-WHERE c.up != 1 AND c.checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
+    FROM checks c 
+    JOIN assets a ON c.asset_id = a.id 
+    WHERE c.up != 1 AND c.checked_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
 $issues_result = mysqli_query($connect, $issues_query);
 $issues = mysqli_fetch_assoc($issues_result);
 
@@ -121,64 +131,77 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
 
 <h2>Asset List</h2>
 
-<table class="w3-table w3-bordered w3-striped w3-margin-bottom">
-    <tr>
-        <th class="bm-table-icon"></th>
-        <th>Name</th>
-        <th>Last Check</th>
-        <th class="bm-table-icon"></th>
-        <th class="bm-table-icon"></th>
-        <th class="bm-table-icon"></th>
-    </tr>
+<?php if (mysqli_num_rows($result)): ?>
 
-    <?php while ($record = mysqli_fetch_assoc($result)): ?>
+    <table class="w3-table w3-bordered w3-striped w3-margin-bottom">
         <tr>
-            <td>
-                <?php if($record['image']): ?>
-                    <img src="<?=$record['image']?>" width="70" style="border: 1px solid #848484; box-sizing: border-box;">
-                <?php endif; ?>
-            </td>
-            <td>
-                <?=$record['name'] ?>
-                <br>
-                <small>
-                    URL: <a href="<?=$record['url']?>"><?=$record['url']?></a>
-                </small>
-            </td>
-            <td>
-                <?php if($record['last_check']): ?>
-                    <span class="w3-tag <?=$record['check_status'] == 1 ? 'w3-green' : 'w3-red'?>">
-                        <?=$record['check_status'] == 1 ? 'Up' : 'Down'?>
-                    </span>
+            <th class="bm-table-icon"></th>
+            <th>Name</th>
+            <th>Last Check</th>
+            <th class="bm-table-icon"></th>
+            <th class="bm-table-icon"></th>
+            <th class="bm-table-icon"></th>
+        </tr>
+
+        <?php while ($record = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td>
+                    <?php if($record['image']): ?>
+                        <img src="<?=$record['image']?>" width="70" style="border: 1px solid #848484; box-sizing: border-box;">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?=$record['name'] ?>
                     <br>
                     <small>
-                        <?=time_elapsed_string($record['last_check'])?>
-                        <?php if($record['response_time']): ?>
-                            <br>
-                            Response: <?=round($record['response_time'], 2)?>ms
-                        <?php endif; ?>
+                        URL: <a href="<?=$record['url']?>"><?=$record['url']?></a>
                     </small>
-                <?php endif; ?>
-            </td>
-            <td>
-                <a href="/details/<?=$record['id'] ?>">
-                    <i class="fa-solid fa-chart-line"></i>
-                </a>
-            </td>
-            <td>
-                <a href="/admin/edit/<?=$record['id'] ?>">
-                    <i class="fa-solid fa-pencil"></i>
-                </a>
-            </td>
-            <td>
-                <a href="#" onclick="return confirmModal('Are you sure you want to delete the asset <?=$record['name'] ?>?', '/admin/dashboard/delete/<?=$record['id'] ?>');">
-                    <i class="fa-solid fa-trash-can"></i>
-                </a>
-            </td>
-        </tr>
-    <?php endwhile; ?>
+                </td>
+                <td>
+                    <?php if($record['last_check']): ?>
+                        <span class="w3-tag <?=$record['check_status'] == 1 ? 'w3-green' : 'w3-red'?>">
+                            <?=$record['check_status'] == 1 ? 'Up' : 'Down'?>
+                        </span>
+                        <br>
+                        <small>
+                            <?=time_elapsed_string($record['last_check'])?>
+                            <?php if($record['response_time']): ?>
+                                <br>
+                                Response: <?=round($record['response_time'], 2)?>ms
+                            <?php endif; ?>
+                        </small>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="/details/<?=$record['id'] ?>">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="/admin/edit/<?=$record['id'] ?>">
+                        <i class="fa-solid fa-pencil"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" onclick="return confirmModal('Are you sure you want to delete the asset <?=$record['name'] ?>?', '/admin/dashboard/delete/<?=$record['id'] ?>');">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </td>
+            </tr>
+        <?php endwhile; ?>
 
-</table>
+    </table>
+
+<?php else: ?>
+
+    <div class="w3-panel w3-light-grey w3-border-green">
+        <p>
+            <i class="fas fa-check-circle"></i>
+            No issues assets being monitored!
+        </p>
+    </div>
+
+<?php endif; ?>
 
 <a
     href="/admin/add"

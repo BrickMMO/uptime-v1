@@ -46,47 +46,47 @@ $result = mysqli_query($connect, $query);
 
 <?php if(mysqli_num_rows($result)): ?>
 
-<div class="w3-responsive">
-    <table class="w3-table w3-striped w3-bordered">
-        <thead>
-            <tr class="w3-light-grey">
-                <th>Time</th>
-                <th>Asset</th>
-                <th>URL</th>
-                <th>Response Time</th>
-                <th>Error Message</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while($issue = mysqli_fetch_assoc($result)): ?>
-            <tr>
-                <td><?=date('M j, H:i:s', strtotime($issue['checked_at']))?></td>
-                <td><strong><?=htmlspecialchars($issue['name'])?></strong></td>
-                <td>
-                    <small class="w3-text-grey">
-                        <?=htmlspecialchars($issue['url'])?>
-                    </small>
-                </td>
-                <td>
-                    <?=$issue['response_time'] ? round($issue['response_time'], 2) . 'ms' : 'N/A'?>
-                </td>
-                <td class="w3-text-red">
-                    <?=$issue['error_message'] ? htmlspecialchars($issue['error_message']) : 'No specific error message'?>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</div>
+    <div class="w3-responsive">
+        <table class="w3-table w3-striped w3-bordered">
+            <thead>
+                <tr class="w3-light-grey">
+                    <th>Time</th>
+                    <th>Asset</th>
+                    <th>URL</th>
+                    <th>Response Time</th>
+                    <th>Error Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while($issue = mysqli_fetch_assoc($result)): ?>
+                <tr>
+                    <td><?=date('M j, H:i:s', strtotime($issue['checked_at']))?></td>
+                    <td><strong><?=htmlspecialchars($issue['name'])?></strong></td>
+                    <td>
+                        <small class="w3-text-grey">
+                            <?=htmlspecialchars($issue['url'])?>
+                        </small>
+                    </td>
+                    <td>
+                        <?=$issue['response_time'] ? round($issue['response_time'], 2) . 'ms' : 'N/A'?>
+                    </td>
+                    <td class="w3-text-red">
+                        <?=$issue['error_message'] ? htmlspecialchars($issue['error_message']) : 'No specific error message'?>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
 
 <?php else: ?>
 
-<div class="w3-panel w3-pale-green w3-border w3-border-green">
-    <p>
-        <i class="fas fa-check-circle"></i>
-        No issues detected in the last 24 hours!
-    </p>
-</div>
+    <div class="w3-panel w3-light-grey w3-border-green">
+        <p>
+            <i class="fas fa-check-circle"></i>
+            No issues detected in the last 24 hours!
+        </p>
+    </div>
 
 <?php endif; ?>
 
