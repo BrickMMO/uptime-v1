@@ -161,7 +161,7 @@ function google_get_client($access_token = false)
     $client->setAccessType('offline');
     // $client->setRedirectUri('http://localhost:8888/callback.php');
     // $client->setRedirectUri(ENV_DOMAIN.'/action/google/app/token');
-    $client->setRedirectUri('https://account.local.brickmmo.com/action/google/app/token');
+    $client->setRedirectUri('https://account.local.brickmmo.com:33/action/google/app/token');
 
     /**
      * If access token is provided, use it to initiate the client.

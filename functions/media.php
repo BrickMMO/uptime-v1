@@ -9,7 +9,7 @@ function media_tags($identifier)
         FROM tags
         INNER JOIN media_tag
         ON media_tag.tag_id = tags.id
-        WHERE media_tag.medium_id = "'.$identifier.'"';
+        WHERE media_tag.media_id = "'.$identifier.'"';
     $result = mysqli_query($connect, $query);
 
     $tags = array();
@@ -45,7 +45,7 @@ function media_fetch($identifier)
             FROM tags
             INNER JOIN media_tag
             ON media_tag.tag_id = tags.id
-            WHERE media_tag.medium_id = "'.$identifier.'"';
+            WHERE media_tag.media_id = "'.$identifier.'"';
         $result = mysqli_query($connect, $query);
 
         $tags = array();

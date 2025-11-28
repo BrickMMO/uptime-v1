@@ -63,7 +63,7 @@ function navigation_array($selected = false)
         $selected = str_replace('//', '/', $selected);
         $selected = str_replace('.php', '', $selected);
         $selected = str_replace('.', '/', $selected);
-        $selected = substr($selected, 0, strrpos($selected, '/'));
+        $selected = substr($selected, 0, strpos($selected, '/'));
 
         foreach($navigation as $levels)
         {

@@ -6,7 +6,7 @@
  * determine which PHP file to execute and which parts of the URL are variables. 
  * 
  * For example:
- * http://console.local.brickmmo.com/media/tags/edit/1
+ * http://console.local.brickmmo.com:33/media/tags/edit/1
  * Will route to the /console/media.tags.php file with a variable named edit
  * with a value of 1.
  */

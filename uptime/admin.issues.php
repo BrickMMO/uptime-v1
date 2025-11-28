@@ -61,7 +61,7 @@ $result = mysqli_query($connect, $query);
                 <?php while($issue = mysqli_fetch_assoc($result)): ?>
                 <tr>
                     <td><?=date('M j, H:i:s', strtotime($issue['checked_at']))?></td>
-                    <td><strong><?=htmlspecialchars($issue['name'])?></strong></td>
+                    <td><?=htmlspecialchars($issue['name'])?></td>
                     <td>
                         <small class="w3-text-grey">
                             <?=htmlspecialchars($issue['url'])?>

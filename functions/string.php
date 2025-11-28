@@ -1,5 +1,14 @@
 <?php
 
+function string_filesize($bytes, $decimals = 0)
+{
+
+    $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $factor = floor((strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $sizes[$factor];
+
+}
+
 function string_hash($length = 10)
 {
 
@@ -108,7 +117,7 @@ function string_url_local($url)
     {
         // Do not convert for GitHub hosted assets
         if(string_url_ip($url) == '185.199.108.153') return $url;
-        $url = str_replace('brickmmo.com', 'local.brickmmo.com', $url);
+        $url = str_replace('brickmmo.com', 'local.brickmmo.com:33', $url);
     }
 
     if(ENV_HTTPS == false)
