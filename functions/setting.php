@@ -10,8 +10,21 @@ function setting_fetch($name, $format = 'plain')
         WHERE name = "'.$name.'"
         LIMIT 1';
     $result = mysqli_query($connect, $query);
-    $record = mysqli_fetch_assoc($result);
-    
+
+    if(!mysqli_num_rows($result))
+    {
+
+        $data = fetch_json('http://sso.brickmmo.com/api/setting/'.$name);
+        $record['value'] = $data['setting'];
+
+    }
+    else
+    {
+
+        $record = mysqli_fetch_assoc($result);
+
+    }
+
     switch($format)
     {
         case 'comma':

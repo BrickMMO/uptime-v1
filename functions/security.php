@@ -1,5 +1,20 @@
 <?php
 
+function security_api_ip()
+{
+
+    $allowed_ips = array(
+        '127.0.0.1', // Localhost
+        '34.122.134.38', // GCP
+        '173.209.32.2', // WHC
+        '173.209.32.3', // WHC
+    );
+
+    if(!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) return false;
+    else return true;
+    
+}
+
 function security_is_logged_in()
 {
 
