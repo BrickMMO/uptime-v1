@@ -36,7 +36,7 @@ $result = mysqli_query($connect, $query);
     Uptime
 </h1>
 <p>
-    <a href="/admin/dashboard">Uptime</a> / 
+    <a href="<?=ENV_DOMAIN?>/admin/dashboard">Uptime</a> / 
     Recent Issues
 </p>
 

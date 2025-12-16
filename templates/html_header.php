@@ -22,7 +22,7 @@
     -->
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?=ENV_DOMAIN?>/favicon.ico">
 
     <!-- Script JavaScript File -->
     <script src="/script.js"></script>

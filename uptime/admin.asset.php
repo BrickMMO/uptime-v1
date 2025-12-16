@@ -100,7 +100,7 @@ include('../templates/message.php');
     Uptime
 </h1>
 <p>
-    <a href="/admin/dashboard">Uptime</a> / 
+    <a href="<?=ENV_DOMAIN?>/admin/dashboard">Uptime</a> / 
     Asset Details
 </p>
 

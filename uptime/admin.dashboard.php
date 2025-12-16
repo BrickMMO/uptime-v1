@@ -173,12 +173,12 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a href="/details/<?=$record['id'] ?>">
+                    <a href="<?=ENV_DOMAIN?>/details/<?=$record['id'] ?>">
                         <i class="fa-solid fa-chart-line"></i>
                     </a>
                 </td>
                 <td>
-                    <a href="/admin/edit/<?=$record['id'] ?>">
+                    <a href="<?=ENV_DOMAIN?>/admin/edit/<?=$record['id'] ?>">
                         <i class="fa-solid fa-pencil"></i>
                     </a>
                 </td>
@@ -204,7 +204,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
 <?php endif; ?>
 
 <a
-    href="/admin/add"
+    href="<?=ENV_DOMAIN?>/admin/add"
     class="w3-button w3-white w3-border"
 >
     <i class="fa-solid fa-pen-to-square fa-padding-right"></i> Add Asset
@@ -213,7 +213,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
 
 <!--
 <a
-    href="/admin/import"
+    href="<?=ENV_DOMAIN?>/admin/import"
     class="w3-button w3-white w3-border"
 >
     <i class="fa-solid fa-download"></i> Import Colours
@@ -233,7 +233,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
             <div class="w3-container w3-padding">Uptime Status Summary</div>
             <footer class="w3-container w3-border-top w3-padding">
                 <a
-                    href="/admin/uptime/colours"
+                    href="<?=ENV_DOMAIN?>/admin/uptime/colours"
                     class="w3-button w3-border w3-white"
                 >
                     <i class="fa-regular fa-file-lines fa-padding-right"></i>
@@ -250,7 +250,7 @@ $overall_uptime = $stats['total_checks_24h'] > 0 ? ($stats['up_checks_24h'] / $s
             <div class="w3-container w3-padding">App Statistics Summary</div>
             <footer class="w3-container w3-border-top w3-padding">
                 <a
-                    href="/stats/colours"
+                    href="<?=ENV_DOMAIN?>/stats/colours"
                     class="w3-button w3-border w3-white"
                 >
                     <i class="fa-regular fa-chart-bar fa-padding-right"></i> Full Report

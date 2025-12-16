@@ -75,7 +75,7 @@ $result = mysqli_query($connect, $query);
                                     Last Check: <span class="w3-bold"><?=time_elapsed_string($record['last_check'])?></span>
                                 <?php endif; ?>
                                 <hr>
-                                <a href="/details/<?=$record['id']?>">Asset Details</a>
+                                <a href="<?=ENV_DOMAIN?>/details/<?=$record['id']?>">Asset Details</a>
                             </div>
                                     
                         </div>
