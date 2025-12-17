@@ -4,7 +4,8 @@
  * Start the session
  */
 session_set_cookie_params([
-    'domain' => ENV_LOCAL ? '.local.brickmmo.com:33' : '.brickmmo.com',
+    'lifetime' => 0,
+    'domain' => ENV_LOCAL ? '.local.brickmmo.com' : '.brickmmo.com',
     'path' => '/',
     'secure' => ENV_HTTPS ? true : false,
     // 'httponly' => true,
