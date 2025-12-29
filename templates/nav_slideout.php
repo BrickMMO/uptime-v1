@@ -110,7 +110,7 @@ $navigation = navigation_array();
     onclick="prevent(event);"
 >
   <div class="w3-padding-16 w3-border-bottom">
-    <a href="<?=ENV_DOMAIN?>/city/dashboard" class="w3-bar-item w3-button">
+    <a href="<?=ENV_DOMAIN?>/console/dashboard" class="w3-bar-item w3-button">
       <i class="fa-solid fa-gauge fa-padding-right w3-text-dark-grey"></i>
       Dashboard
     </a>

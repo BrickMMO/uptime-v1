@@ -112,12 +112,17 @@ function string_normalize_url($url)
 function string_url_local($url)
 {
 
-    
     if (ENV_LOCAL == true) 
     {
         // Do not convert for GitHub hosted assets
         if(string_url_ip($url) == '185.199.108.153') return $url;
-        $url = str_replace('brickmmo.com', 'local.brickmmo.com:33', $url);
+
+        // Convert to local if not already local
+        if(strpos($url, 'local.brickmmo.com:33') === false)
+        {
+            $url = str_replace('brickmmo.com', 'local.brickmmo.com:33', $url);
+        }
+
     }
 
     if(ENV_HTTPS == false)
